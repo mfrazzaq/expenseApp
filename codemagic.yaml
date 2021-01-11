@@ -1,10 +1,17 @@
-# Check out https://docs.codemagic.io/getting-started/yaml/ for more information
+# Check out https://docs.codemagic.io/getting-started/building-a-native-ios-app/ for more information
+# Please review and update values in curly braces
 
 workflows:
-    flutter-package:
-        name: Flutter or Dart Package
+    ios-app:
+        name: iOS App
         environment:
-            flutter: dev
+            vars:
+                XCODE_WORKSPACE: "{{ ADD WORKSPACE NAME HERE }}"
+                XCODE_SCHEME: "{{ ADD SCHEME NAME HERE }}"
+            xcode: latest
+            cocoapods: default
         scripts:
-            - flutter packages pub get
-            - flutter test
+            - xcodebuild build -workspace "$XCODE_WORKSPACE.xcworkspace" -scheme "$XCODE_SCHEME" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+        artifacts:
+            - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
+            - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
